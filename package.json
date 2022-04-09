@@ -1,0 +1,36 @@
+{
+  "name": "ufirst",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/js/index.js",
+  "scripts": {
+    "build": "webpack --config webpack.prod.js",
+    "start": "webpack serve --open --config webpack.dev.js"
+  },
+  "engines": {
+    "npm": ">=8.6.0",
+    "node": ">=16.13.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stanrogo/UFirst.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stanrogo/UFirst/issues"
+  },
+  "homepage": "https://github.com/stanrogo/UFirst#readme",
+  "devDependencies": {
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.8.1",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "d3": "^7.4.3"
+  }
+}

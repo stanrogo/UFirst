@@ -1,0 +1,39 @@
+name: deploy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events but only for the master branch
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deploy-to-server:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: 'dummy string'
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: build
+        run: |
+         npm install
+         npm run build
+      - name: Deploy Frontend with rsync
+        run: rsync -r --delete -q ./dist/ .htaccess ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/stanrogo/public_html/ufirst.stanrogo.com
+      - name: Deploy Backend with rsync
+        run: |
+         rsync -r --delete -q ./importer/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/stanrogo/public_html/ufirst.stanrogo.com/importer
+         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /home/stanrogo/public_html/ufirst.stanrogo.com/importer && npm install && npm stop && npm start"
