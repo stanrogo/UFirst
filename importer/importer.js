@@ -3,21 +3,19 @@ const readline = require('readline');
 
 class Importer {
   constructor() {
-    const pattern = Object.values(Importer.patterns).join(' ');
+    this.outputFilePath = './output.json';
+    this.inputFilePath = './epa-http.txt';
+    const patterns = {
+      'host': '((?:[a-zA-Z0-9\\-]+\\.)+[a-zA-Z0-9]+)',
+      'dateTime': '\\[(\\d{2}):(\\d{2}):(\\d{2}):(\\d{2})\\]',
+      'request': '"([A-Z]+)?(.*)(?: ([A-Z]+)\\/([0-9.]+))?"',
+      'httpCode': '([0-9]+)',
+      'bytes': '([0-9]+|-)',
+    };
+    const pattern = Object.values(patterns).join(' ');
     this.regExp = new RegExp(pattern);
     this.json = null;
   }
-
-  static outputFilePath = './output.json';
-  static inputFilePath = './epa-http.txt';
-
-  static patterns = {
-    'host': '((?:[a-zA-Z0-9\\-]+\\.)+[a-zA-Z0-9]+)',
-    'dateTime': '\\[(\\d{2}):(\\d{2}):(\\d{2}):(\\d{2})\\]',
-    'request': '"([A-Z]+)?(.*)(?: ([A-Z]+)\\/([0-9.]+))?"',
-    'httpCode': '([0-9]+)',
-    'bytes': '([0-9]+|-)',
-  };
 
   /**
    * Import the EPA file into JSON, writing to disk and memory if it not exists
@@ -27,7 +25,7 @@ class Importer {
     return new Promise((resolve, reject) => {
       if (this.json != null) resolve(this.json);
 
-      fs.readFile(Importer.outputFilePath, async (err, data) => {
+      fs.readFile(this.outputFilePath, async (err, data) => {
         if (err) {
           try {
             const inputData = await this.parse();
@@ -53,7 +51,7 @@ class Importer {
 
       try {
         const rl = readline.createInterface({
-          input: fs.createReadStream(Importer.inputFilePath),
+          input: fs.createReadStream(this.inputFilePath),
         });
 
         rl.on('line', (line) => {
@@ -108,7 +106,7 @@ class Importer {
     return new Promise((resolve, reject) => {
       const json = JSON.stringify(outputArray);
 
-      fs.writeFile(Importer.outputFilePath, json, (err) => {
+      fs.writeFile(this.outputFilePath, json, (err) => {
         if (err) {
           reject(err);
         }
