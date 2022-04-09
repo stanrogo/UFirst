@@ -1,18 +1,25 @@
-var express = require('express');
-var cors = require('cors');
+const express = require('express');
+const cors = require('cors');
 
 process.title = 'ufirstImporter';
 
-var getJson = require('./importer.js');
+const Importer = require('./importer.js');
+const importer = new Importer();
 
-var app = express();
+const app = express();
 
 app.use(cors());
 
-app.get("/epa", (_req, res, next) => {
-    getJson().then((ret) => res.json(ret)).catch((err) => next(err));
+app.get("/epa", async (_req, res, next) => {
+  try {
+    res.header("Content-Type",'application/json');
+    const json = await importer.import();
+    res.send(json);
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.listen(3000, () => {
-    console.log("Server running on port 3000");
+  console.log("Server running on port 3000");
 });
