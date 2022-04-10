@@ -2,9 +2,9 @@
 // Released under the ISC license.
 // https://observablehq.com/@d3/histogram
 
-import { map, max, sum, scaleLinear, range, axisBottom, axisLeft, create, bin } from "d3";
+import { map, max, extent, sum, scaleLinear, range, axisBottom, axisLeft, create, bin } from "d3";
 
-export function Histogram(data, {
+export default function Histogram(data, {
     value = d => d, // convenience alias for x
     domain, // convenience alias for xDomain
     label, // convenience alias for xLabel
@@ -12,12 +12,12 @@ export function Histogram(data, {
     type = scaleLinear, // convenience alias for xType
     x = value, // given d in data, returns the (quantitative) x-value
     y = () => 1, // given d in data, returns the (quantitative) weight
-    thresholds = 40, // approximate number of bins to generate, or threshold function
+    binCount = 40, // approximate number of bins to generate, or threshold function
     normalize, // whether to normalize values to a total of 100%
     marginTop = 20, // top margin, in pixels
     marginRight = 30, // right margin, in pixels
     marginBottom = 30, // bottom margin, in pixels
-    marginLeft = 40, // left margin, in pixels
+    marginLeft = 50, // left margin, in pixels
     width = 640, // outer width of chart, in pixels
     height = 400, // outer height of chart, in pixels
     insetLeft = 0.5, // inset left edge of bar
@@ -29,10 +29,10 @@ export function Histogram(data, {
     xFormat = format, // a format specifier string for the x-axis
     yType = scaleLinear, // type of y-scale
     yDomain, // [ymin, ymax]
-    yRange = [height - marginBottom, marginTop], // [bottom, top]
+    yRange = [height - marginBottom - 20, marginTop + 20], // [bottom, top]
     yLabel = "↑ Frequency", // a label for the y-axis
     yFormat = normalize ? "%" : undefined, // a format specifier string for the y-axis
-    color = "currentColor" // bar fill color
+    color = "currentColor", // bar fill color
   } = {}) {
     // Compute values.
     const X = map(data, x);
@@ -40,6 +40,8 @@ export function Histogram(data, {
     const I = range(X.length);
   
     // Compute bins.
+    const [minim, maxim] = extent(X);
+    const thresholds = range(minim, maxim, (maxim - minim) / binCount);
     const bins = bin().thresholds(thresholds).value(i => X[i])(I);
     const Y = Array.from(bins, I => sum(I, i => Y0[i]));
     if (normalize) {
@@ -63,7 +65,7 @@ export function Histogram(data, {
         .attr("height", height)
         .attr("viewBox", [0, 0, width, height])
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-  
+
     svg.append("g")
         .attr("transform", `translate(${marginLeft},0)`)
         .call(yAxis)
@@ -73,7 +75,7 @@ export function Histogram(data, {
             .attr("stroke-opacity", 0.1))
         .call(g => g.append("text")
             .attr("x", -marginLeft)
-            .attr("y", 10)
+            .attr("y", 20)
             .attr("fill", "currentColor")
             .attr("text-anchor", "start")
             .text(yLabel));
@@ -91,11 +93,11 @@ export function Histogram(data, {
         .text((d, i) => [`${d.x0} ≤ x < ${d.x1}`, yFormat(Y[i])].join("\n"));
   
     svg.append("g")
-        .attr("transform", `translate(0,${height - marginBottom})`)
+        .attr("transform", `translate(0,${height - marginBottom - 20})`)
         .call(xAxis)
         .call(g => g.append("text")
             .attr("x", width - marginRight)
-            .attr("y", 27)
+            .attr("y", 40)
             .attr("fill", "currentColor")
             .attr("text-anchor", "end")
             .text(xLabel));

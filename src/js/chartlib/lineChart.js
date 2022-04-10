@@ -4,14 +4,14 @@
 
 import { map, max, line, extent, scaleLinear, scaleUtc, curveLinear, range, axisBottom, axisLeft, create } from "d3";
 
-export function LineChart(data, {
+export default function LineChart(data, {
     x = ([x]) => x, // given d in data, returns the (temporal) x-value
     y = ([, y]) => y, // given d in data, returns the (quantitative) y-value
     defined, // for gaps in data
     curve = curveLinear, // method of interpolation between points
     marginTop = 20, // top margin, in pixels
     marginRight = 30, // right margin, in pixels
-    marginBottom = 30, // bottom margin, in pixels
+    marginBottom = 20, // bottom margin, in pixels
     marginLeft = 40, // left margin, in pixels
     width = 640, // outer width, in pixels
     height = 400, // outer height, in pixels
@@ -72,7 +72,7 @@ export function LineChart(data, {
             .attr("stroke-opacity", 0.1))
         .call(g => g.append("text")
             .attr("x", -marginLeft)
-            .attr("y", 10)
+            .attr("y", 20)
             .attr("fill", "currentColor")
             .attr("text-anchor", "start")
             .text(yLabel));

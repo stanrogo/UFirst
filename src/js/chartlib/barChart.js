@@ -4,14 +4,14 @@
 
 import { map, max, scaleLinear, InternSet, range, scaleBand, axisBottom, axisLeft, create } from "d3";
 
-export function BarChart(data, {
+export default function BarChart(data, {
   x = (d, i) => i, // given d in data, returns the (ordinal) x-value
   y = d => d, // given d in data, returns the (quantitative) y-value
   title, // given d in data, returns the title text
-  marginTop = 20, // the top margin, in pixels
+  marginTop = 40, // the top margin, in pixels
   marginRight = 0, // the right margin, in pixels
-  marginBottom = 30, // the bottom margin, in pixels
-  marginLeft = 40, // the left margin, in pixels
+  marginBottom =20, // the bottom margin, in pixels
+  marginLeft = 60, // the left margin, in pixels
   width = 640, // the outer width of the chart, in pixels
   height = 400, // the outer height of the chart, in pixels
   xDomain, // an array of (ordinal) x-values
@@ -67,7 +67,7 @@ export function BarChart(data, {
       .attr("stroke-opacity", 0.1))
     .call(g => g.append("text")
       .attr("x", -marginLeft)
-      .attr("y", 10)
+      .attr("y", 20)
       .attr("fill", "currentColor")
       .attr("text-anchor", "start")
       .text(yLabel));

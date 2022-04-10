@@ -1,32 +1,46 @@
 <!doctype html>
 <html lang="en-GB">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Evaluation of EPA Server Access</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Evaluation of EPA Server Access</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
         <h1>Evaluation of EPA Server Access</h1>
+      </div>
+    </div>
+    <main class="row">
+      <section class="col-sm-12 col-md-6 chart-col">
+        <h2>HTTP Methods</h2>
+        <div id="methodChart" class="chart"></div>
+      </section>
+      <section class="col-sm-12 col-md-6 chart-col">
+        <h2>Requests per Minute</h2>
+        <div id="requestsPerMinuteChart" class="chart"></div>
+      </section>
+      <section class="col-sm-12 col-md-6 chart-col">
+        <h2>Response Codes</h2>
+        <div id="responseCodeChart" class="chart"></div>
+      </section>
+      <section class="col-sm-12 col-md-6 chart-col">
+        <h2>Response Size</h2>
+        <div id="documentSizeChart" class="chart"></div>
+        <form>
+          <div class="input-group">
+            <label for="numBins">Number of bins</label>
+            <input type="number" id="numBins" value="20">
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
 
-        <div class="block">
-          <h2>HTTP Methods</h2>
-          <div id="methodChart"></div>
-        </div>
-        <div class="block">
-          <h2>Requests per Minute</h2>
-          <div id="requestsPerMinuteChart"></div>
-        </div>
-        <div class="block">
-          <h2>Response Codes</h2>
-          <div id="responseCodeChart"></div>
-        </div>
-        <div class="block">
-          <h2>Response Size</h2>
-          <div id="documentSizeChart"></div>
-        </div>
-
-        <script src="./output.json"></script>
-    </body>
 </html>
