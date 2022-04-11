@@ -5,7 +5,7 @@ This repository contains:
 - a [backend node JS server](importer) to parse some EPA server access logs into a clean JSON format; and
 - a frontend JS app which consumes the JSON and visualises it in four distinct diagrams.
 
-The application is hosted at https://ufirst.stanrogo.com/.
+The application is hosted at https://ufirst.stanrogo.com/ and has been tested using the most recent version of Microsoft Edge.
 
 ## Backend - Importer
 
